@@ -25,7 +25,7 @@ public class ToolsController {
     public void export(HttpServletResponse response, String port) throws IOException {
         String id = UUID.randomUUID().toString();
         HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet("http://a2hkc.witque.cn/demo.json");
+        HttpGet request = new HttpGet(url);
         HttpResponse resp = client.execute(request);
         String demo = "";
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
