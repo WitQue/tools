@@ -2,17 +2,9 @@ package cn.witque.tools.service.impl;
 
 import cn.witque.tools.service.V2rayService;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +12,6 @@ import java.util.UUID;
 
 @Service
 public class V2rayServiceImpl implements V2rayService {
-
-    @Value("${v2ray-demo-url} ")
-    private String url;
-
 
     /**
      * 下载获取V2ray配置文件
