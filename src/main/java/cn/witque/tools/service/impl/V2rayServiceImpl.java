@@ -17,8 +17,8 @@ import java.util.UUID;
 @Service
 public class V2rayServiceImpl implements V2rayService {
 
-//    @Value("${v2ray-demo-url} ")
-//    private String url;
+    @Value("${v2ray-demo-url} ")
+    private String url;
 
 
     /**
@@ -29,7 +29,7 @@ public class V2rayServiceImpl implements V2rayService {
     public void getV2rayConfig(HttpServletResponse response,String port){
         String id = UUID.randomUUID().toString();
         HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet("https://sh-1251143468.cos.ap-hongkong.myqcloud.com/demo.json");
+        HttpGet request = new HttpGet(url);
         HttpResponse resp = null;
         try {
         resp = client.execute(request);
