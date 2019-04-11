@@ -6,5 +6,4 @@ public interface V2rayService {
 
     void getV2rayConfig(HttpServletResponse response, String port);
 
-
 }
