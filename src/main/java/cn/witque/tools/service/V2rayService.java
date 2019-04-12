@@ -13,4 +13,6 @@ public interface V2rayService {
     void truncateV2rayLog();
 
     int getV2rayLogCount();
+
+    int delV2rayLog(String id);
 }

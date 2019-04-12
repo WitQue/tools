@@ -33,6 +33,12 @@ public class PageController {
     }
 
 
+    @CrossOrigin
+    @PostMapping("/delV2rayLog")
+    public Object delV2rayLog(@RequestBody Map<String,String> map){
+        return v2rayService.delV2rayLog(map.get("id"));
+    }
+
 
 
 }

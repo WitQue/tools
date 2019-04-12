@@ -63,5 +63,9 @@ public class V2rayServiceImpl implements V2rayService {
         return v2rayMapper.getV2rayLogCount();
     }
 
+
+    public int delV2rayLog(String id){
+        return v2rayMapper.delV2rayLog(id);
+    }
 }
 
