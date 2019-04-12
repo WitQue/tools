@@ -31,6 +31,7 @@ public class CdnJob {
     @Value("${secret-key}")
     private String secretKey;
 
+    private final String cron = "0/10 * * * * ?";
 
     private static COSClient COS_CLIENT = null;
 
@@ -38,75 +39,22 @@ public class CdnJob {
     /**
      * 初始化客户端
      */
-    @PostConstruct
-    public void init() {
+    public @PostConstruct void init() {
         COSCredentials cred = new BasicCOSCredentials(accessKey,secretKey);
         ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
         COS_CLIENT = new COSClient(cred, clientConfig);
         log.info("初始化客户端");
     }
 
-
     /**
      * CND任务
      */
-    @Scheduled(cron = "0/10 * * * * ? ")
+//    @Scheduled(cron = cron)
     public void cndJob(){
-        List<String> file = getNotHave();
+        List<String> file = getNotInCloudFileNameList();
         if (file != null) {
             upload(file);
         }
-    }
-
-
-    /**
-     * 取得对象云存储里的文件
-     * @return
-     */
-    public List<String> getYunList() {
-        ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
-        listObjectsRequest.setBucketName(BUCKET_NAME);
-        String prefix = getPrefix();
-        listObjectsRequest.setPrefix(prefix);
-        listObjectsRequest.setMaxKeys(Integer.valueOf(999));
-        ObjectListing objectListing = COS_CLIENT.listObjects(listObjectsRequest);
-        List<COSObjectSummary> objectSummaries = objectListing.getObjectSummaries();
-        List<String> bucketList = new ArrayList();
-        for (COSObjectSummary cosObjectSummary : objectSummaries) {
-            String key = cosObjectSummary.getKey().replace(prefix, "");
-            if (!key.equals("")) {
-                bucketList.add(key);
-            }
-        }
-        return bucketList;
-    }
-
-    /**
-     * 检测不存在的文件并删除本地文件
-     * @return
-     */
-    public List<String> getNotHave() {
-        File file = new File(LOCAL_PATH + getPrefix());
-
-        String[] files = file.list();
-        if ((file == null) || (files == null)) {
-            log.info("未检测到服务器不存在的文件(跳出)");
-            return null;
-        }
-        List<String> bucketList = getYunList();
-        List<String> localList = Arrays.asList(files);
-        List<String> notHaveList = new ArrayList();
-        for (String local : localList) {
-            boolean flag = bucketList.contains(local);
-            if (!flag) {
-                notHaveList.add(local);
-            } else {
-                File delFile = new File(LOCAL_PATH + getPrefix() + local);
-                delFile.delete();
-                log.info("已删除：" + LOCAL_PATH + getPrefix() + local);
-            }
-        }
-        return notHaveList;
     }
 
 
@@ -146,7 +94,55 @@ public class CdnJob {
     }
 
 
+    /**
+     * 取得对象云存储里的文件
+     * @return
+     */
+    public List<String> getCloudFileNameList() {
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
+        listObjectsRequest.setBucketName(BUCKET_NAME);
+        String prefix = getPrefix();
+        listObjectsRequest.setPrefix(prefix);
+        listObjectsRequest.setMaxKeys(Integer.valueOf(999));
+        ObjectListing objectListing = COS_CLIENT.listObjects(listObjectsRequest);
+        List<COSObjectSummary> objectSummaries = objectListing.getObjectSummaries();
+        List<String> bucketList = new ArrayList();
+        for (COSObjectSummary cosObjectSummary : objectSummaries) {
+            String key = cosObjectSummary.getKey().replace(prefix, "");
+            if (!key.equals("")) {
+                bucketList.add(key);
+            }
+        }
+        return bucketList;
+    }
 
+    /**
+     * 检测不存在的文件并删除本地文件
+     * @return
+     */
+    public List<String> getNotInCloudFileNameList() {
+        File file = new File(LOCAL_PATH + getPrefix());
+
+        String[] files = file.list();
+        if ((file == null) || (files == null)) {
+            log.info("未检测到服务器不存在的文件(跳出)");
+            return null;
+        }
+        List<String> bucketList = getCloudFileNameList();
+        List<String> localList = Arrays.asList(files);
+        List<String> notHaveList = new ArrayList();
+        for (String local : localList) {
+            boolean flag = bucketList.contains(local);
+            if (!flag) {
+                notHaveList.add(local);
+            } else {
+                File delFile = new File(LOCAL_PATH + getPrefix() + local);
+                delFile.delete();
+                log.info("已删除：" + LOCAL_PATH + getPrefix() + local);
+            }
+        }
+        return notHaveList;
+    }
 
 
 }
