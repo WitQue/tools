@@ -3,6 +3,7 @@ package cn.witque.tools.controller;
 import cn.witque.tools.service.V2rayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ public class ToolsController {
      * @param response
      * @param port
      */
+    @CrossOrigin
     @GetMapping("/getV2rayConf")
     public void export(HttpServletResponse response, String port){
         v2rayService.getV2rayConfig(response,port);
