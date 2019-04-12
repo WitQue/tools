@@ -49,7 +49,7 @@ public class CdnJob {
     /**
      * CND任务
      */
-//    @Scheduled(cron = cron)
+    @Scheduled(cron = cron)
     public void cndJob(){
         List<String> file = getNotInCloudFileNameList();
         if (file != null) {
