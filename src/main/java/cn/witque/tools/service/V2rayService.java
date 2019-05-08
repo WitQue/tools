@@ -1,14 +1,14 @@
 package cn.witque.tools.service;
 
+import com.github.pagehelper.PageInfo;
+
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
 
 public interface V2rayService {
 
     String getV2rayConfig(HttpServletResponse response, String port);
 
-    List<Map<String,Object>> getV2rayLog(int nowPage,int pageSize);
+    PageInfo getV2rayLog(String nowPage, String pageSize);
 
     void truncateV2rayLog();
 

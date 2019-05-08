@@ -14,6 +14,10 @@ public interface V2rayMapper {
     @Select("SELECT * FROM `v2ray` ORDER BY id DESC limit #{nowPage},#{pageSize};")
     List<Map<String,Object>> getV2rayLog(@Param("nowPage") int nowPage,@Param("pageSize") int pageSize);
 
+    @Select("SELECT * FROM `v2ray` ORDER BY id DESC")
+    List<Map<String,Object>> getAllV2rayLog();
+
+
     @Select("SELECT  COUNT(1) FROM `v2ray`")
     Integer getV2rayLogCount();
 

@@ -3,6 +3,8 @@ package cn.witque.tools.service.impl;
 import cn.witque.tools.mapper.V2rayMapper;
 import cn.witque.tools.service.V2rayService;
 import cn.witque.tools.util.HttpClientUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +49,15 @@ public class V2rayServiceImpl implements V2rayService {
     }
 
 
-   public List<Map<String,Object>> getV2rayLog(int nowPage,int pageSize){
-       List<Map<String, Object>> list = v2rayMapper.getV2rayLog(nowPage,pageSize);
-       return list;
+   public PageInfo getV2rayLog(String nowPage,String pageSize){
+        int index = Integer.parseInt(nowPage);
+        if (index < 1) {
+            index = 1;
+        }
+       PageHelper.startPage(index , Integer.parseInt(pageSize));
+       List<Map<String, Object>> list = v2rayMapper.getAllV2rayLog();
+       PageInfo<Map<String, Object>> mapPageInfo = new PageInfo<>(list);
+       return mapPageInfo;
     }
 
     @Override

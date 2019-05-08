@@ -31,7 +31,7 @@ public class CdnJob {
     @Value("${secret-key}")
     private String secretKey;
 
-    private final String cron = "0/10 * * * * ?";
+    private final String cron = "0/30 * * * * ?";
 
     private static COSClient COS_CLIENT = null;
 
